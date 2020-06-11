@@ -9,7 +9,16 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::BaseControl
             render json: { error: 'Not Found' }, status: :not_found
         end
     end
-    
+
+    def letter
+        url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/#{params[:letter]}?page=#{params[:page]}"
+        mangas = get_info_manga(url)
+        unless mangas.empty?
+            render json: {mangas: mangas}, status: :ok
+        else
+            render json: { error: 'Not Found' }, status: :not_found
+        end
+    end
 
     def get_info_manga url
         response = get_html(url)

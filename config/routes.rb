@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       namespace :v1 do 
         namespace :manga do 
           get '/all', to: 'manga_list#all'
+          get '/:letter', to: 'manga_list#letter'
         end
       end
     end
