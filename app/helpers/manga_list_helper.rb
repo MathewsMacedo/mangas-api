@@ -1,0 +1,2 @@
+module MangaListHelper
+end
