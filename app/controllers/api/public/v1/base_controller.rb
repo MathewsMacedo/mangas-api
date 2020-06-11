@@ -1,17 +1,17 @@
-class Api::Public::V1::Manga::BaseController < ApplicationController
+class Api::Public::V1::BaseController < ApplicationController
 
     def get_json url
         response = HTTParty.get(url)
         response.parsed_response
     end
     
-    def get_body url
+    def get_html url
         response = HTTParty.get(url)
-        response.body
     end
     
     def image_to_base64 url
-        img = URI.open(url)
+        require 'open-uri'
+        img = open(url)
         Base64.encode64(img.read)
     end
 

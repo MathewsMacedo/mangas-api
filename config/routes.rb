@@ -5,9 +5,7 @@ Rails.application.routes.draw do
     namespace :public do 
       namespace :v1 do 
         namespace :manga do 
-          
-
-
+          get '/all', to: 'manga_list#all'
         end
       end
     end
