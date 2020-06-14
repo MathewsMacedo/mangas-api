@@ -13,5 +13,12 @@ Rails.application.routes.draw do
         end
       end
     end
+    namespace :restrict do
+      namespace :v1 do 
+        namespace :manga do 
+          post '/create', to: 'serie#create'
+        end
+      end
+    end
   end
 end

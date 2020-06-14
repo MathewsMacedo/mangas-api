@@ -32,13 +32,21 @@ class Api::Public::V1::Manga::BaseController < ApplicationController
         name[0] #posicao 0 nome
     end 
 
+    def description_include  description, tag
+        while description.include? tag
+            description = description.sub(tag, "\n")
+        end
+        description
+    end
+
     def get_description manga
         description_trash =  manga.split('<span class="series-desc">')
         description = description_trash[1].split('</span>')
         description = description[0].gsub("  ","")
-        while description.include? "<br>"
-            description = description.sub("<br>", "\n")
-        end
+        description = description_include(description,"<br>")
+        description = description_include(description,"</div>")
+        description = description_include(description,"<div>")
+        description = description_include(description,"</div><div>")
         description = description.sub("\n","")
         description.gsub("\r\n","")
     end

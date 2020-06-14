@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id_serie: 
+  cover: 
+  name: 
+  categories: 
+  chapters: 
+  description: 
+  artist: 
+  score: 
+  is_complete: 
+  lang: 
+  chapters_all: MyText
+
+two:
+  id_serie: 
+  cover: 
+  name: 
+  categories: 
+  chapters: 
+  description: 
+  artist: 
+  score: 
+  is_complete: 
+  lang: 
+  chapters_all: MyText

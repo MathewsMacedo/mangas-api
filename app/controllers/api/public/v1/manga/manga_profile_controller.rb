@@ -20,10 +20,10 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
         manga = get_info_manga(url)
 
         chapters = get_all_chapters(params[:id_serie])
-
-        manga["chapters_all"] = chapters
+        
         unless chapters.empty? ||  chapters.nil?
-            render json: {serie: manga}, status: :ok
+            manga["chapters_all"] = chapters.to_s
+            render json: manga, status: :ok
         else
             render json: { error: 'Not Found', name: params[:name]}, status: :not_found
         end
@@ -128,11 +128,15 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
     # end
 
     def get_number_chapters manga
+        begin
         chapters_trash = manga.split('<span class="chapters">')
         chapters = chapters_trash[1].split('<img')
         chapters = chapters[0]
         chapters = chapters.gsub("  ","")
-        chapters.sub("\n","")
+        return chapters.sub("\n","")
+        rescue 
+            return 0
+        end
     end
 
     def get_score manga
