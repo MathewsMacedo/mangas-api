@@ -1,6 +1,33 @@
 class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::BaseController
 
     def all 
+        params[:page] = 1 if params[:page].nil? 
+        mangas = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
+        .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
+        .as_json(:except => :id)
+        unless mangas.empty? || mangas.nil?
+            render json: {mangas: mangas}, status: :ok
+        else
+            render json: { error: 'Not Found' }, status: :not_found
+        end
+    end
+
+    def letter
+        params[:name] = "" if params[:name].nil?
+        params[:page] = 1 if params[:page].nil? 
+        mangas = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
+        .where("name like ? ", "#{params[:name].to_s}%")
+        .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
+        .as_json(:except => :id)
+        unless mangas.empty?
+            render json: {mangas: mangas}, status: :ok
+        else
+            render json: { error: 'Not Found' }, status: :not_found
+        end
+    end
+
+
+    def all_manga_livre
         url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/todos?page=#{params[:page]}"
         mangas = get_info_manga(url)
         unless mangas.empty?
@@ -10,7 +37,7 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
         end
     end
 
-    def letter
+    def letter_manga_livre
         url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/#{params[:letter]}?page=#{params[:page]}"
         mangas = get_info_manga(url)
         unless mangas.empty?

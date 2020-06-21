@@ -1,0 +1,2 @@
+module MangaChapterHelper
+end
