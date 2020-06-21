@@ -44,17 +44,7 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
         end
     end
 
-    # def page_chapters
-    #     params[:name] = params[:name].to_s.downcase
-    #     params[:name] =  params[:name].to_s.gsub(/[^0-9A-Za-z]/, '')
-    #     chapters = get_page_chapters(params[:id_serie],params[:page])
-    #     unless chapters.empty? ||  chapters.nil?
-    #         render json: {chapters: chapters}, status: :ok
-    #     else
-    #         render json: { error: 'Not Found', name: params[:name]}, status: :not_found
-    #     end
-        
-    # end
+
 
     private
 
@@ -121,26 +111,6 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
         end
         chapters
     end
-
-
-    # def get_page_chapters id_serie,page
-    #     chapters = []
-    #     response = get_json("https://mangalivre.net/series/chapters_list.json?page="+page.to_s+"&id_serie="+id_serie.to_s+"")
-    #        unless response["chapters"] == false || response["chapters"].nil? || response["chapters"].empty?
-    #         for c in 0..response["chapters"].length - 1 
-    #                 chapters << {
-    #                 id_serie: response["chapters"][c]["id_serie"],
-    #                 id_chapter: response["chapters"][c]["id_chapter"],
-    #                 name: response["chapters"][c]["id_chapter"],
-    #                 chapter_name: response["chapters"][c]["chapter_name"],
-    #                 number: response["chapters"][c]["number"],
-    #                 date: response["chapters"][c]["date"],
-    #                 date_created: response["chapters"][c]["date_created"]
-    #                 }
-    #         end
-    #     end 
-    #     chapters
-    # end
 
     def get_number_chapters manga
         begin
