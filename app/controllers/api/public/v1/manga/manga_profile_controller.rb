@@ -12,7 +12,22 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
         end
     end
 
+
     def all_chapters
+        manga = nil
+        id_serie = params[:id_serie].to_i
+        if id_serie.present?
+          manga = Serie.where(id_serie: id_serie).first
+            unless manga.nil?
+                puts manga[:chapters_all]
+                render json: {serie: manga}, status: :ok
+            else
+                render json: { error: 'Not Found'}, status: :not_found
+            end
+        end
+    end
+
+    def all_chapters_register
         params[:name] = params[:name].to_s.downcase
         params[:name] =  params[:name].to_s.gsub(/[^0-9A-Za-z]/, '')
 
