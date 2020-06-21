@@ -5,8 +5,9 @@ Rails.application.routes.draw do
     namespace :public do 
       namespace :v1 do 
         namespace :manga do 
+          get '/search', to: 'manga_list#search'
           get '/all', to: 'manga_list#all'
-          get '/:letter', to: 'manga_list#letter'
+          get '/:name', to: 'manga_list#letter'
           get '/:name/:id_serie', to: 'manga_profile#profile'
           get '/:name/:id_serie/:id_chapter', to: 'manga_chapter#show_img_chapter'
         end

@@ -1,7 +1,6 @@
 class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::BaseController
 
     def profile
-        manga = nil
         id_serie = params[:id_serie].to_i
         if id_serie.present?
           manga = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang, :chapters_all)
@@ -14,5 +13,4 @@ class Api::Public::V1::Manga::MangaProfileController < Api::Public::V1::Manga::B
             end
         end
     end
-
 end
