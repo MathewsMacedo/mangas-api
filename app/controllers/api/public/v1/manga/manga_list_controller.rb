@@ -5,7 +5,7 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
         .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
         .as_json(:except => :id)
         unless mangas.empty? || mangas.nil?
-            render json: {mangas: mangas}, status: :ok
+            render json: {series: mangas}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
         end
@@ -14,11 +14,11 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
     def letter
         params[:page] = 1 if params[:page].nil? 
         mangas = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
-        .where("name like ? ", "#{params[:name].to_s[0..0]}%")
+        .where("name like ? ", "#{params[:name].to_s[0..0].downcase}%")
         .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
         .as_json(:except => :id)
         unless mangas.empty?
-            render json: {mangas: mangas}, status: :ok
+            render json: {series: mangas}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
         end
@@ -26,11 +26,11 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
 
     def search
         mangas = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
-        .where("name like ? ", "#{params[:name].to_s}%")
+        .where("name like ? ", "#{params[:name].to_s.downcase}%")
         .order("LOWER(name) asc").limit(10)
         .as_json(:except => :id)
         unless mangas.empty?
-            render json: {mangas: mangas}, status: :ok
+            render json: {series: mangas}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
         end
@@ -41,7 +41,7 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
         url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/todos?page=#{params[:page]}"
         mangas = get_info_manga(url)
         unless mangas.empty?
-            render json: {mangas: mangas}, status: :ok
+            render json: {series: mangas}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
         end
@@ -51,7 +51,7 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
         url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/#{params[:letter]}?page=#{params[:page]}"
         mangas = get_info_manga(url)
         unless mangas.empty?
-            render json: {mangas: mangas}, status: :ok
+            render json: {series: mangas}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
         end
