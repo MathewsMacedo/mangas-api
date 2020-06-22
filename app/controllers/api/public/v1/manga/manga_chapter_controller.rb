@@ -19,6 +19,11 @@ class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::B
 
     def get_key(page)
         response = get_html("https://mangalivre.net/manga/anime/#{page}/capitulo-0")
+        puts
+        puts
+        puts response.to_s
+        puts
+        puts
         key_trash = response.split('.identifier = "')
         key = key_trash[1].split('"')
         key[0]
