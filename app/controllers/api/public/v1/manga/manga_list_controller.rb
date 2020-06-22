@@ -26,7 +26,7 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
 
     def search
         mangas = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
-        .where("LOWER(name) like ? ", "%#{params[:name].to_s.downcase}%")
+        .where("LOWER(name) like ? ", "#{params[:name].to_s.downcase}%")
         .order("LOWER(name) asc").limit(10)
         .as_json(:except => :id)
         unless mangas.empty?
