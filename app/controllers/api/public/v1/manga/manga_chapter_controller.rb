@@ -25,6 +25,7 @@ class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::B
     end
 
     def  get_page(link)
+        link = link.gsub('%2F','/')
         page = link.split('/')
         page[3]
     end
