@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         namespace :manga do 
           get '/search', to: 'manga_list#search'
           get '/categories', to: 'manga_list#categories'
-          get '/categories/:categorie', to: 'manga_list#show_categorie'
+          get '/categories/:category', to: 'manga_list#show_category'
           get '/all', to: 'manga_list#all'
           get '/:name', to: 'manga_list#letter'
           get '/:name/:id_serie', to: 'manga_profile#profile'

@@ -38,17 +38,18 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
 
     def categories
         series = Serie.select(:categories).all() 
-        categories = {} 
+        categories = []
         series.each do |serie| 
             if serie.categories.present?
                 cat = serie.categories.split(' | ')
                     unless cat.nil? || cat.empty?
                         cat.each do |c| 
-                             if categories[c].nil?
-                                categories[c] = 1 
-                            else
-                                categories[c] += 1
-                            end
+                             i = categories.index {|cat| cat["name"] == c}
+                             if i.nil?
+                                categories << {"name" => c, "titles" => 1}
+                             else
+                                categories[i]["titles"] += 1
+                             end
                         end
                     end
             end
@@ -60,10 +61,10 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
         end
     end
 
-    def show_categorie
-        categorie = params[:categorie]
+    def show_category
+        category = params[:category]
         serie = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
-                .where("LOWER(categories) like ? ","%#{categorie.to_s.downcase}%")
+                .where("LOWER(categories) like ? ","%#{category.to_s.downcase}%")
                 .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
                 .as_json(:except => :id)
         if serie.present?
