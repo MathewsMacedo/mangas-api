@@ -28,10 +28,11 @@ class Api::Restrict::V1::Manga::SerieController < ApplicationController
         if header == Rails.application.credentials.manga_api_insert 
             id = params[:id].to_i
 
-            @serie = Serie.find(id)
-            @serie.updated_at = DateTime.now
-            if @serie.update(serie_params)
-                render json: { serie: @serie}, status: :ok
+            serie = Serie.where(id: id).update_all(id_serie: params[:id_serie], cover: params[:cover],name: params[:name],categories: params[:categories],chapters: params[:chapters],description: params[:description],artist: params[:artist],score: params[:score],is_complete: params[:is_complete],lang: params[:lang],chapters_all: params[:chapters_all],images_all: params[:images_all], updated_at: DateTime.now)
+           
+            if serie.present?
+                serie  = Serie.find(id)
+                render json: { serie: serie}, status: :ok
             else
                 render json: { errors: @serie.errors.full_messages }, status: :unprocessable_entity
             end
