@@ -1,31 +1,52 @@
 class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::BaseController
 
     def show_img_chapter
+        id_link = params[:id_link].to_s
+        id_serie = params[:id_serie].to_i       
+        
+        serie = Serie.where(id_serie: id_serie).first
+        images_chapters = JSON.parse(serie.images_all)
+        images = nil
+
+        images_chapters.each do |chapter|
+            if chapter["id_link"] == id_link
+                images = chapter
+                break
+            end
+        end
+
+        if images.present?
+            render json: images, status: :ok
+        else
+            render json: { error: 'Not Found'}, status: :not_found
+        end
+
+    end 
+   
+    def show_img_chapter_mangalivre
         page = get_page(params[:link])     
         
         key = get_key(page)       
         img = get_img(page,key)
 
         unless key.nil? and img.nil?
-            render json: {images: img}, status: :ok
+            render json: {id_link: page, images: img["images"]}, status: :ok
         else
             render json: { error: 'Not Found'}, status: :not_found
         end
 
     end
 
-
     private 
 
     def get_key(page)
         response = get_html("https://mangalivre.net/manga/anime/#{page}/capitulo-0")
-        puts
-        puts
-        puts response.to_s
-        puts
-        puts
+        begin
         key_trash = response.split('.identifier = "')
         key = key_trash[1].split('"')
+        rescue 
+            return nil
+        end
         key[0]
     end
 
@@ -39,3 +60,4 @@ class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::B
         get_json("https://mangalivre.net/leitor/pages/#{page}.json?key=#{key}")
     end
 end
+
