@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_191012) do
+ActiveRecord::Schema.define(version: 2020_06_22_141329) do
 
   create_table "series", force: :cascade do |t|
     t.integer "id_serie"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2020_06_13_191012) do
     t.text "chapters_all"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "images_all"
     t.index ["id_serie"], name: "index_series_on_id_serie"
     t.index ["name"], name: "index_series_on_name"
   end
