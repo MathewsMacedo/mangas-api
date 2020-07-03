@@ -35,7 +35,43 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
             render json: { error: 'Not Found' }, status: :not_found
         end
     end
-    
+
+    def categories
+        series = Serie.select(:categories).all() 
+        categories = {} 
+        series.each do |serie| 
+            if serie.categories.present?
+                cat = serie.categories.split(' | ')
+                    unless cat.nil? || cat.empty?
+                        cat.each do |c| 
+                             if categories[c].nil?
+                                categories[c] = 1 
+                            else
+                                categories[c] += 1
+                            end
+                        end
+                    end
+            end
+        end
+        unless categories.empty?
+            render json: {categories: categories}, status: :ok
+        else
+            render json: { error: 'Not Found' }, status: :not_found
+        end
+    end
+
+    def show_categorie
+        categorie = params[:categorie]
+        serie = Serie.select(:id_serie, :cover, :name, :categories, :chapters, :description, :artist, :score, :is_complete, :lang)
+                .where("LOWER(categories) like ? ","%#{categorie.to_s.downcase}%")
+                .order("LOWER(name) asc").limit(10).offset(params[:page].to_i * 10)
+                .as_json(:except => :id)
+        if serie.present?
+            render json: {series: serie}, status: :ok
+        else
+            render json: { error: 'Not Found' }, status: :not_found
+        end
+    end
 
     def all_manga_livre
         url = "https://mangalivre.net/lista-de-mangas/ordenar-por-nome/todos?page=#{params[:page]}"
