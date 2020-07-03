@@ -55,6 +55,11 @@ class Api::Public::V1::Manga::MangaListController < Api::Public::V1::Manga::Base
             end
         end
         unless categories.empty?
+            categories.sort_by!{|c| c["name"]}
+            categories.sort_by!{|c| c["name"]}.reverse! if params.include? "desc" and params.include? "name"
+            categories.sort_by!{|c| c["titles"]} if params.include? "titles"
+            categories.sort_by!{|c| c["titles"]}.reverse! if params.include? "desc" and params.include? "titles"
+          
             render json: {categories: categories}, status: :ok
         else
             render json: { error: 'Not Found' }, status: :not_found
