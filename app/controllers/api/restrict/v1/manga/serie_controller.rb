@@ -21,6 +21,26 @@ class Api::Restrict::V1::Manga::SerieController < ApplicationController
    
     end
     
+    def update 
+        header = request.headers['token']
+        header = header.split(' ').last if header
+
+        if header == Rails.application.credentials.manga_api_insert 
+            id = params[:id].to_i
+
+            @serie = Serie.find(id)
+            @serie.updated_at = DateTime.now
+            if @serie.update(serie_params)
+                render json: { serie: @serie}, status: :ok
+            else
+                render json: { errors: @serie.errors.full_messages }, status: :unprocessable_entity
+            end
+
+        else
+             render json: { error: 'Access Unauthorized'}, status: :unauthorized
+        end
+
+    end
 
     private
     def serie_params
@@ -40,7 +60,8 @@ class Api::Restrict::V1::Manga::SerieController < ApplicationController
             :score, 
             :is_complete, 
             :lang, 
-            :chapters_all
+            :chapters_all,
+            :images_all
         )
     end
 end
