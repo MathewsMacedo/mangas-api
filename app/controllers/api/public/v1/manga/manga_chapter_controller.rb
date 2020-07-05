@@ -9,17 +9,27 @@ class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::B
         chapters = JSON.parse(serie.chapters_all)
         chapter = {}
 
-        chapters.each do |chp| 
-            if chp["id_link"] == id_link
+        [nil, *chapters, nil].each_cons(3){|nxt , curr, prev|
+            if curr["id_link"] == id_link
                 images_chapters.each do |img|
                     if img["id_link"] == id_link               
-                        chapter = chp
+                        chapter = curr
+                        chapter["id_next"] = ""
+                        chapter["id_prev"] = ""
+
+                        chapter["id_next"] = nxt["id_link"] unless nxt.nil?
+                        chapter["id_prev"] = prev["id_link"] unless prev.nil?
                         chapter["images"] = img["images"]
                         break
                     end
                 end
             end
-        end
+        }
+
+
+
+
+
         if chapter.present?
             render json: chapter, status: :ok
         else
