@@ -6,17 +6,22 @@ class Api::Public::V1::Manga::MangaChapterController < Api::Public::V1::Manga::B
         
         serie = Serie.where(id_serie: id_serie).first
         images_chapters = JSON.parse(serie.images_all)
-        images = nil
+        chapters = JSON.parse(serie.chapters_all)
+        chapter = {}
 
-        images_chapters.each do |chapter|
-            if chapter["id_link"] == id_link
-                images = chapter
-                break
+        chapters.each do |chp| 
+            if chp["id_link"] == id_link
+                images_chapters.each do |img|
+                    if img["id_link"] == id_link               
+                        chapter = chp
+                        chapter["images"] = img["images"]
+                        break
+                    end
+                end
             end
         end
-
-        if images.present?
-            render json: images, status: :ok
+        if chapter.present?
+            render json: chapter, status: :ok
         else
             render json: { error: 'Not Found'}, status: :not_found
         end
